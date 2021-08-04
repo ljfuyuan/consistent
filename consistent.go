@@ -18,7 +18,7 @@
 //
 // Read more about consistent hashing on wikipedia:  http://en.wikipedia.org/wiki/Consistent_hashing
 //
-package consistent // import "stathat.com/c/consistent"
+package consistent
 
 import (
 	"errors"
@@ -61,6 +61,18 @@ type Consistent struct {
 func New() *Consistent {
 	c := new(Consistent)
 	c.NumberOfReplicas = 20
+	c.circle = make(map[uint32]string)
+	c.members = make(map[string]bool)
+	return c
+}
+
+func NewWithFnv(replicas int) *Consistent {
+	c := new(Consistent)
+	if replicas == 0 {
+		replicas = 20
+	}
+	c.NumberOfReplicas = replicas
+	c.UseFnv = true
 	c.circle = make(map[uint32]string)
 	c.members = make(map[string]bool)
 	return c
